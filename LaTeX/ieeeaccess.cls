@@ -63,10 +63,8 @@
 \def\addressfont{\rmfamily\fontencoding{T1}\fontseries{n}\fontsize{6.6}{8}\selectfont}%times roman 6.6pt
 \def\correspfont{\rmfamily\fontencoding{T1}\fontseries{n}\fontsize{7.7}{9.24}\selectfont}%times roman 7.7pt
 \def\tfootnotefont{\rmfamily\fontencoding{T1}\fontseries{n}\fontsize{7.7}{9.24}\selectfont}%times roman 7.7pt
-\def\abstractfont{\rmfamily\fontencoding{T1}\fontseries{n}\fontsize{10}{12}\selectfont}%times roman 10pt
 \def\indexfont{\rmfamily\fontencoding{T1}\fontseries{n}\fontsize{10}{12}\selectfont}%times roman 10pt
 \def\bodyfont{\rmfamily\fontencoding{T1}\fontseries{n}\fontsize{10}{12}\selectfont}%times roman 10pt
-\def\abstractheadfont{\sffamily\fontencoding{T1}\fontseries{b}\fontsize{10}{12}\selectfont}%formata bold 9pt
 \def\indexheadfont{\sffamily\fontencoding{T1}\fontseries{b}\fontsize{10}{12}\selectfont}%formata bold 9pt
 \def\sectionAfont{\sffamily\fontencoding{T1}\fontseries{b}\fontsize{9}{12}\selectfont}%formata bold 9pt
 \def\sectionBfont{\sffamily\fontencoding{T1}\fontseries{b}\fontshape{sl}\fontsize{9}{12}\selectfont}%formata mediumitalic 9pt
@@ -91,14 +89,11 @@
 \ifjtehm
 \def\correspfont{\sffamily\fontencoding{T1}\fontseries{n}\fontsize{7}{8}\selectfont}%times roman 7.7pt
 \def\tfootnotefont{\sffamily\fontencoding{T1}\fontseries{n}\fontsize{7}{8}\selectfont}%times roman 7.7pt
-\def\abstractheadfont{\sffamily\fontencoding{T1}\fontseries{b}\fontsize{9}{12}\selectfont}%formata bold 9pt
 \def\indexheadfont{\sffamily\fontencoding{T1}\fontseries{b}\fontsize{9}{12}\selectfont}%formata bold 9pt
 \def\titlepageheaderfont{\sffamily\fontencoding{T1}\fontseries{b}\fontsize{9}{12}\selectfont}%formata bold 9pt
 \fi
 
 \AtBeginDocument{%
-%
-%
 % enable Times now - so that all class options can see the correct font families
 \fontencoding{T1}\selectfont%
 \bodyfont\selectfont%
@@ -172,15 +167,6 @@
     \def\thesectiondis{APPENDIX.}% 
     \def\thesubsection{\Alph{subsection}}%
     \refstepcounter{section}% update the \ref counter
-%    \@ifmtarg{#1}{\@IEEEappendixsavesection*{{\color{accessblue}\sectionAfont APPENDIX}}%
-%                  \addcontentsline{toc}{section}{Appendix}}{%
-%             \@IEEEappendixsavesection*{{\color{accessblue}\sectionAfont APPENDIX \\* #1}}%
-%             \addcontentsline{toc}{section}{Appendix: #1}}%
-    % redefine \section command for appendix
-    % leave \section* as is
-%    \def\section{\@ifstar{\@IEEEappendixsavesection*}{%
-%                    \@IEEEdestroythesectionargument}}% throw out the argument
-                                                     % of the normal form
 }
 
 \def\appendices{\par%
@@ -239,78 +225,6 @@
 %\hbox to\hsize{\box\@tempboxa\hfil}%
 %\fi
 \fi\fi\vskip 1pt plus 1pt minus 1pt}
-
-%tables
-\ifjtehm
-  \def\thetable{\@Roman\c@table}
-\else
-  \def\thetable{\@arabic\c@table}
-\fi
-\def\fps@table{tbp}
-\def\ftype@table{2}
-\def\ext@table{lot}
-\def\tablename{TABLE}
-\def\fnum@table{\tablename~\thetable}
-
-%%%
-%figures
-\def\thefigure{\@arabic\c@figure}
-\def\fps@figure{tbp}
-\def\ftype@figure{1}
-\def\ext@figure{lof}
-\def\figurename{FIGURE}
-\def\fnum@figure{\figurename~\thefigure}
-
-\define@key{figkeys}{topskip}{\def\fig@topskip{#1}} % skip above image
-\define@key{figkeys}{midskip}{\def\fig@midskip{#1}} % skip between image and caption
-\define@key{figkeys}{botskip}{\def\fig@botskip{#1}} % skip below caption
-\setkeys{figkeys}{topskip=0pt,midskip=0pt,botskip=0pt}%
-
-\newsavebox\figbox
-\def\Figure{\@ifnextchar[{\@Figure}{\@Figure[t!]}}
-\def\@Figure[#1]{\@ifnextchar({\@@Figure[#1]}{\@@Figure[#1](topskip=0pt)}}
-\def\@@Figure[#1](#2){\@ifnextchar[{\@@@Figure[#1](#2)}{\@@@Figure[#1](#2)[scale=1]}}
-%%%%%%%%%%%%
-\def\@@@Figure[#1](#2)[#3]#4#5{%
-      \setkeys{figkeys}{#2}% Set new keys
-      \setbox\figbox\hbox{\includegraphics[#3]{#4}}%
-      \xdef\xfigwd{\the\wd\figbox}%
-      \ifdim\wd\figbox<\columnwidth% Columnwidth Figure
-        \begin{figure}[#1]%
-          \centering%
-          \vspace*{5pt}%
-          \vspace*{\fig@topskip}%
-%          \centerline{\epsfframe{\begin{tabular}{@{}c@{}}
-%          \epsfxsize=\epsfxsize \hphantom{\epsfbox{#4}} \\ %%% NEW
-%          \epsfysize=\epsfysize \vphantom{\epsfbox{#4}} \end{tabular}}}
-          \includegraphics[#3]{#4}%
-          \vspace*{\fig@midskip}%
-          \caption{#5}%
-          \vspace*{\fig@botskip}%
-        \end{figure}
-      \else% Wide Figure
-        \begin{figure*}[#1]%
-          \centering%
-          \vspace*{5pt}%
-          \vspace*{\fig@topskip}%
-%          \centerline{\epsfframe{\begin{tabular}{@{}c@{}}
-%          \epsfxsize=\epsfxsize \hphantom{\epsfbox{#4}} \\ %%% NEW
-%          \epsfysize=\epsfysize \vphantom{\epsfbox{#4}} \end{tabular}}}
-          \includegraphics[#3]{#4}%
-          \vspace*{\fig@midskip}%
-          \caption{#5}%
-          \vspace*{\fig@botskip}%
-        \end{figure*}
-      \fi%
-}
-%%%%%%%%%%%%
-
-\define@key{tabkeys}{topskip}{\def\tab@topskip{#1}} % skip above table
-\define@key{tabkeys}{botskip}{\def\tab@botskip{#1}} % skip below table
-\define@key{tabkeys}{width}{\def\tab@width{#1}} % width of the table
-\define@key{tabkeys}{resize}{\def\tab@resize{#1}} % toresize the table using \resizebox
-\define@key{tabkeys}{arraystretch}{\def\tab@arraystretch{#1}} % toresize the table using \resizebox
-\setkeys{tabkeys}{topskip=0pt,botskip=0pt,width=\columnwidth,resize=!,arraystretch=1.3}%
 
 % #1 -> table position t, b, p, h, !
 % #2 -> keyvalues: topskip, botskip, width, resize, arraystretch etc
@@ -397,8 +311,8 @@
      }}
   }
 \else
-  \def\headerlogo{\raisebox{-2pt}{\includegraphics[width=7.61pc]{full_logo.png}}}
-  \def\headerlogoall{\raisebox{-2pt}{\includegraphics[width=7.61pc]{small_logo.png}}}
+  \def\headerlogo{\raisebox{-2pt}{\includegraphics[height=5pc]{full_logo.png}}}
+  \def\headerlogoall{\raisebox{-2pt}{\includegraphics[height=3pc]{small_logo.png}}}
   \def\ps@titlepage{%
     \def\@oddhead{\parbox[t]{\textwidth}{\mbox{}\\[-6.3mm]\mbox{}\nheaderfont\color{accessblue}\headName\hfill\headerlogo{\raisebox{-2pt}{\,}}\color{black}\vspace*{-1.5mm}\par\hrulefill}}
     \def\@evenhead{\parbox[t]{\textwidth}{\mbox{}\\[-6.3mm]\mbox{}\headerlogo\hfill\nheaderfont\color{accessblue}\headName{\raisebox{-2pt}{\,}}\color{black}\vspace*{-1.5mm}\par\hrulefill}}
@@ -430,20 +344,14 @@
 %%%
 %title
 \newlength\titlewidth
-\newlength\abstractwidth
 \ifjtehm
   \setlength\titlewidth{35.90pc}
-  \let\abstractwidth\titlewidth
 \else
   \setlength\titlewidth{152.83mm}
-  \let\abstractwidth\titlewidth
-  \advance\abstractwidth by -2.39mm
 \fi
 \newcounter{addrCtr}
-\newsavebox\abstractbox
 \newsavebox\indexbox
 
-\def\abstracttitle{{\color{accessblue}\abstractheadfont INTRODUCTION}\ifjtehm\quad\else\space\fi}
 \def\indextitle{{\color{accessblue}\indexheadfont MOTS-CLÉS}\ifjtehm\quad\else\space\fi}
 \def\history#1{\gdef\@history{#1}}\let\@history\@empty%
 \def\artnum#1{\gdef\@artnum{#1}}
@@ -452,59 +360,12 @@
 \def\title#1{\gdef\@title{#1}}
 \def\authorrefmark#1{\textsuperscript{#1}}
 \def\corresp#1{\gdef\@corresp{#1}}\let\@corresp\@empty%
-\def\tfootnote#1{\gdef\@tfootnote{#1}}\let\@tfootnote\@empty%
 \def\author#1{\gdef\@author{#1}}
 \def\address{\@ifnextchar[{\@address}{\@address[\unskip]}}
 \def\@address[#1]#2{\stepcounter{addrCtr}%
      \expandafter\gdef\csname addrInd\theaddrCtr\endcsname{#1}%
      \expandafter\gdef\csname addr\theaddrCtr\endcsname{#2}%
 }
-
-\newdimen\absht
-\renewenvironment{abstract}
-     {\global\setbox99=\hbox\bgroup\noindent%
-      \ifjtehm\else\raisebox{-.8pc}{\includegraphics[width=0.5em]{bullet.png}}\hspace*{1.5mm}\fi%
-      \begin{minipage}[t]{\abstractwidth}%
-      \abstracttitle\bodyfont%
-     }
-     {\end{minipage}%
-      \egroup%
-      \global\setlength\absht{\the\dp99}%
-     }
-
-\newdimen\kwdht
-\ifdefined\keywords\else\newenvironment{keywords}{}{}\fi
-\ifdefined\IEEEkeywords\else\newenvironment{IEEEkeywords}{}{}\fi
-\renewenvironment{keywords}
-     {\global\setbox88=\hbox\bgroup\noindent%
-      \ifjtehm\else\raisebox{-.8pc}{\includegraphics[width=0.5em]{bullet.png}}\hspace*{1.5mm}\fi%
-      \begin{minipage}[t]{\abstractwidth}%
-      \indextitle\bodyfont%
-     }
-     {\end{minipage}%
-      \egroup%
-      \global\setlength\kwdht{\the\dp88}%
-     }
-\renewenvironment{IEEEkeywords}
-     {\global\setbox88=\hbox\bgroup\noindent%
-      \ifjtehm\else\raisebox{-.8pc}{\includegraphics[width=0.5em]{bullet.png}}\hspace*{1.5mm}\fi%
-      \begin{minipage}[t]{\abstractwidth}%
-      \indextitle\bodyfont%
-     }
-     {\end{minipage}%
-      \egroup%
-      \global\setlength\kwdht{\the\dp88}%
-     }
-
-%% for adding linenumbers in abstract and keywords
-\newcount\@tempcntc
-\begingroup
-  \catcode`P=12
-  \catcode`T=12
-  \lowercase{
-    \def\x{\def\rem@dec##1.##2PT{##1}}}
-  \expandafter\endgroup\x
-\def\strip@dec{\expandafter\rem@dec\the}
 
 \newskip\titlepgskip
 \setlength\titlepgskip{0pt}
@@ -539,46 +400,6 @@
      \vspace*{\titlepgskip}%
 }
 
-\newsavebox\maketitlebox
-\def\@jtehmmaketitle{%
-     \setbox\maketitlebox\hbox\bgroup%
-     \begin{tabular*}{\textwidth}{@{}p{2.96pc}@{}p{\titlewidth}@{}p{3.15pc}@{}}%
-     &\begin{center}\vspace*{1.2mm}\vspace*{-1.21pc}\centering%
-     {\vss\historyfont\@history\vss}\vspace*{2mm}\par%
-     {\vss\doifont\space\@doi\vss}\vspace*{2mm}\par%
-     {\vss\doifont\space\@dataDaDefesa\vss}\vspace*{5.4mm}\par
-     {\vss\color{accessblue}\titlefont\@title\vss}\vspace*{6mm}\par%
-     \ifjtehmeditorial\else{\vss\authorfont\@author\vss}\vspace*{1mm}\par%
-       \@tempdima=\absht%\the\ht99%
-       \xdef\abc{\strip@dec\@tempdima}%
-       \@tempcntb=\abc%
-%       \advance\@tempcntb by -10%
-       \@tempcnta=0%
-       \@tempcntc=0%
-       \raisebox{-6pt}{\llap{\smash{\parbox[t]{2pc}{%
-       \loop\ifnum\@tempcnta<\@tempcntb%
-       \advance\@tempcnta by 12%
-       \advance\@tempcntc by 1%
-       \strut%
-       {\strut\mbox{}\abstractfont\vphantom{X}\strut}\strut\\%
-        \repeat\vspace*{2pt}%
-       }}}}%
-     \noindent\box99\vspace{6mm}\par%
-     \@tempcnta=0%
-     \loop\ifnum\@tempcnta<\theaddrCtr%
-       \advance\@tempcnta by 1%
-       \par{\vss\addressfont\textsuperscript{\expandafter\csname addrInd\the\@tempcnta\endcsname}%\space%
-        \expandafter\csname addr\the\@tempcnta\endcsname\vss}%
-     \repeat\vspace*{1mm}\par\fi%
-     {\vss\correspfont\@corresp\vss\vspace{2mm}}\par%
-     \ifjtehmeditorial\else{\vss\tfootnotefont\@tfootnote\vss\vspace{7mm}}\fi\end{center}\par%
-     \ifjtehmeditorial\else\vspace*{-.4pc}\hrulefill\par\fi%
-       {\strut\mbox{}\abstractfont\vphantom{X}\strut}\strut\\%
-     \noindent\box88\par\vspace*{.7pc}\hrulefill\par\vspace{20mm}\par\fi%
-     &\end{tabular*}\par%
-     \egroup%
-     \fixSkip{\the\ht\maketitlebox}%
-}
 \def\@maketitle{%
      \setbox\maketitlebox\hbox\bgroup%
      \begin{minipage}{\titlewidth}%
@@ -588,20 +409,7 @@
      {\vss\tfootnotefont\space\@dataDaDefesa\vss}\vspace*{5.4mm}\par
      {\vss\color{accessblue}\titlefont\@title\vss}\vspace*{6mm}\par%
      \ifaccesseditors\vspace*{2mm}\else{\vss\authorfont\@author\vss}\vspace*{0mm}\par%
-%       \@tempdima=\absht%\the\ht99%
-%       \xdef\abc{\strip@dec\@tempdima}%
-%       \@tempcntb=\abc%
-%%       \advance\@tempcntb by -10%
-%       \@tempcnta=0%
-%       \@tempcntc=0%
-%       \raisebox{-6pt}{\llap{\smash{\parbox[t]{2pc}{%
-%       \loop\ifnum\@tempcnta<\@tempcntb%
-%       \advance\@tempcnta by 12%
-%       \advance\@tempcntc by 1%
-%       \strut%
-%       {\strut\mbox{}\abstractfont\vphantom{X}\strut}\strut\\%
-%        \repeat\vspace*{2pt}%
-%       }}}}%
+
      \@tempcnta=0%
      \loop\ifnum\@tempcnta<\theaddrCtr%
        \advance\@tempcnta by 1%
@@ -619,15 +427,12 @@
      \fixSkip{\the\ht\maketitlebox}%
 }
 \def\editorialmaketitle{\thispagestyle{titlepage}\onecolumngrid%
-%     \setbox\maketitlebox\hbox\bgroup%
      \noindent\begin{minipage}[b]{\titlewidth}%\vspace*{0mm}%
      \raggedright%\vspace*{1.2mm}%
      {\vss\doifont\space\@doi\vss}\vspace*{4mm}\par%
      {\vss\doifont\space\@dataDaDefesa\vss}\vspace*{5.4mm}\par
      {\vss\color{accessblue}\titlefont\@title\vss}\vspace*{6mm}\par%
      \end{minipage}\par%
-%     \egroup%
-%     \fixSkip{\the\ht\maketitlebox}%
 }
 \def\maketitle{\ifaccesseditorial%
      \ifjtehmeditorial\twocolumn[{\thispagestyle{titlepage}\@jtehmmaketitle%
@@ -676,253 +481,6 @@
 \sloppy\clubpenalty4000\widowpenalty4000\interlinepenalty500%
     \sfcode`\.=1000\relax}
 \let\endthebibliography=\endlist
-%%%
-%biography
-%Biography with a photograph
-\ifdefined\biography\else\newenvironment{biography}{}{}\fi
-\ifdefined\IEEEbiography\else\newenvironment{IEEEbiography}{}{}\fi
-\ifdefined\biographynophoto\else\newenvironment{biographynophoto}{}{}\fi
-\ifdefined\IEEEbiographynophoto\else\newenvironment{IEEEbiographynophoto}{}{}\fi
-\renewenvironment{biography}[2][]{\normalfont\biographyfont%
-\unitlength 1in\parskip=0pt\par\parindent 1em\interlinepenalty500%
-% we need enough space to support the hanging indent
-% the nominal value of the spacer
-% and one extra line for good measure
-\@IEEEtrantmpdimenA=\@IEEEBIOhangdepth%
-\advance\@IEEEtrantmpdimenA by \@IEEEBIOskipN%
-\advance\@IEEEtrantmpdimenA by 1\baselineskip%
-% if this page does not have enough space, break it and lets start
-% with a new one
-\@IEEEtranneedspace{\@IEEEtrantmpdimenA}{\relax}%
-% nominal spacer can strech, not shrink use 1fil so user can out stretch with \vfill
-\vskip \@IEEEBIOskipN plus 1fil minus 0\baselineskip%
-% the default box for where the photo goes
-\def\@IEEEtempbiographybox{{\setlength{\fboxsep}{0pt}\framebox{\begin{minipage}[b][\@IEEEBIOphotodepth][c]{\@IEEEBIOphotowidth}\centering PLACE\\ PHOTO\\ HERE \end{minipage}}}}%
-%
-% detect if the optional argument was supplied, this requires the
-% \@ifmtarg command as defined in the appendix section above
-% and if so, override the default box with what they want
-\@ifmtarg{#1}{\relax}{\def\@IEEEtempbiographybox{\mbox{\begin{minipage}[b][\@IEEEBIOphotodepth][c]{\@IEEEBIOphotowidth}%
-\centering%
-#1%
-\end{minipage}}}}% end if optional argument supplied
-% Make an entry into the table of contents only if we have not done so before
-% one more biography
-% Make an entry for this name into the table of contents 
-\addcontentsline{toc}{subsection}{#2}%
-% V1.6 properly handle if a new paragraph should occur while the
-% hanging indent is still active. Do this by redefining \par so
-% that it will not start a new paragraph. (But it will appear to the
-% user as if it did.) Also, strip any leading pars, newlines, or spaces.
-\let\@IEEEBIOORGparCMD=\par% save the original \par command
-\edef\par{\hfil\break\indent}% the new \par will not be a "real" \par
-\settoheight{\@IEEEtrantmpdimenA}{\@IEEEtempbiographybox}% get height of biography box
-\@IEEEtrantmpdimenB=\@IEEEBIOhangdepth%
-\@IEEEtrantmpcountA=\@IEEEtrantmpdimenB% countA has the hang depth
-\divide\@IEEEtrantmpcountA by \baselineskip%  calculates lines needed to produce the hang depth
-\advance\@IEEEtrantmpcountA by 1% ensure we overestimate
-% set the hanging indent
-\hangindent\@IEEEBIOhangwidth%
-\hangafter-\@IEEEtrantmpcountA%
-% reference the top of the photo area to the top of a capital T
-\settoheight{\@IEEEtrantmpdimenB}{\mbox{T}}%
-% set the photo box, give it zero width and height so as not to disturb anything
-\noindent\makebox[0pt][l]{\hspace{-\@IEEEBIOhangwidth}\raisebox{\@IEEEtrantmpdimenB}[0pt][0pt]{\raisebox{-\@IEEEBIOphotodepth}[0pt][0pt]{\@IEEEtempbiographybox}}}%
-% now place the author name and begin the bio text
-\noindent{\biographyheadfont\uppercase {#2}\ }\@IEEEgobbleleadPARNLSP}{\relax\let\par=\@IEEEBIOORGparCMD\par%
-% 7/2001 V1.5 detect when the biography text is shorter than the photo area
-% and pad the unused area - preventing a collision from the next biography entry
-% MDS
-\ifnum \prevgraf <\@IEEEtrantmpcountA\relax% detect when the biography text is shorter than the photo
-    \advance\@IEEEtrantmpcountA by -\prevgraf% calculate how many lines we need to pad
-    \advance\@IEEEtrantmpcountA by -1\relax% we compensate for the fact that we indented an extra line
-    \@IEEEtrantmpdimenA=\baselineskip% calculate the length of the padding
-    \multiply\@IEEEtrantmpdimenA by \@IEEEtrantmpcountA%
-    \noindent\rule{0pt}{\@IEEEtrantmpdimenA}% insert an invisible support strut
-\fi%
-\par\normalfont}
-\renewenvironment{IEEEbiography}[2][]{\normalfont\biographyfont%
-\unitlength 1in\parskip=0pt\par\parindent 1em\interlinepenalty500%
-% we need enough space to support the hanging indent
-% the nominal value of the spacer
-% and one extra line for good measure
-\@IEEEtrantmpdimenA=\@IEEEBIOhangdepth%
-\advance\@IEEEtrantmpdimenA by \@IEEEBIOskipN%
-\advance\@IEEEtrantmpdimenA by 1\baselineskip%
-% if this page does not have enough space, break it and lets start
-% with a new one
-\@IEEEtranneedspace{\@IEEEtrantmpdimenA}{\relax}%
-% nominal spacer can strech, not shrink use 1fil so user can out stretch with \vfill
-\vskip \@IEEEBIOskipN plus 1fil minus 0\baselineskip%
-% the default box for where the photo goes
-\def\@IEEEtempbiographybox{{\setlength{\fboxsep}{0pt}\framebox{\begin{minipage}[b][\@IEEEBIOphotodepth][c]{\@IEEEBIOphotowidth}\centering PLACE\\ PHOTO\\ HERE \end{minipage}}}}%
-%
-% detect if the optional argument was supplied, this requires the
-% \@ifmtarg command as defined in the appendix section above
-% and if so, override the default box with what they want
-\@ifmtarg{#1}{\relax}{\def\@IEEEtempbiographybox{\mbox{\begin{minipage}[b][\@IEEEBIOphotodepth][c]{\@IEEEBIOphotowidth}%
-\centering%
-#1%
-\end{minipage}}}}% end if optional argument supplied
-% Make an entry into the table of contents only if we have not done so before
-% one more biography
-% Make an entry for this name into the table of contents 
-\addcontentsline{toc}{subsection}{#2}%
-% V1.6 properly handle if a new paragraph should occur while the
-% hanging indent is still active. Do this by redefining \par so
-% that it will not start a new paragraph. (But it will appear to the
-% user as if it did.) Also, strip any leading pars, newlines, or spaces.
-\let\@IEEEBIOORGparCMD=\par% save the original \par command
-\edef\par{\hfil\break\indent}% the new \par will not be a "real" \par
-\settoheight{\@IEEEtrantmpdimenA}{\@IEEEtempbiographybox}% get height of biography box
-\@IEEEtrantmpdimenB=\@IEEEBIOhangdepth%
-\@IEEEtrantmpcountA=\@IEEEtrantmpdimenB% countA has the hang depth
-\divide\@IEEEtrantmpcountA by \baselineskip%  calculates lines needed to produce the hang depth
-\advance\@IEEEtrantmpcountA by 1% ensure we overestimate
-% set the hanging indent
-\hangindent\@IEEEBIOhangwidth%
-\hangafter-\@IEEEtrantmpcountA%
-% reference the top of the photo area to the top of a capital T
-\settoheight{\@IEEEtrantmpdimenB}{\mbox{T}}%
-% set the photo box, give it zero width and height so as not to disturb anything
-\noindent\makebox[0pt][l]{\hspace{-\@IEEEBIOhangwidth}\raisebox{\@IEEEtrantmpdimenB}[0pt][0pt]{\raisebox{-\@IEEEBIOphotodepth}[0pt][0pt]{\@IEEEtempbiographybox}}}%
-% now place the author name and begin the bio text
-\noindent{\biographyheadfont\uppercase {#2}\ }\@IEEEgobbleleadPARNLSP}{\relax\let\par=\@IEEEBIOORGparCMD\par%
-% 7/2001 V1.5 detect when the biography text is shorter than the photo area
-% and pad the unused area - preventing a collision from the next biography entry
-% MDS
-\ifnum \prevgraf <\@IEEEtrantmpcountA\relax% detect when the biography text is shorter than the photo
-    \advance\@IEEEtrantmpcountA by -\prevgraf% calculate how many lines we need to pad
-    \advance\@IEEEtrantmpcountA by -1\relax% we compensate for the fact that we indented an extra line
-    \@IEEEtrantmpdimenA=\baselineskip% calculate the length of the padding
-    \multiply\@IEEEtrantmpdimenA by \@IEEEtrantmpcountA%
-    \noindent\rule{0pt}{\@IEEEtrantmpdimenA}% insert an invisible support strut
-\fi%
-\par\normalfont}
-
-
-%Biography without photograph
-% added biography without a photo environment
-\renewenvironment{biographynophoto}[1]{%
-% Make an entry into the table of contents only if we have not done so before
-\if@biographyTOCentrynotmade%
-% link labels to the biography counter so hyperref will jump
-% to the biography, not the previous section
-\setcounter{biography}{-1}%
-\refstepcounter{biography}%
-\addcontentsline{toc}{section}{Biographies}%
-\global\@biographyTOCentrynotmadefalse%
-\fi%
-% one more biography
-\refstepcounter{biography}%
-% Make an entry for this name into the table of contents 
-\addcontentsline{toc}{subsection}{#1}%
-\normalfont\biographyfont\interlinepenalty500%
-\vskip 4\baselineskip plus 1fil minus 0\baselineskip%
-\parskip=0pt\par%
-\noindent{\biographyheadfont\uppercase{#1}\ }\@IEEEgobbleleadPARNLSP}{\relax\par\normalfont}
-\renewenvironment{IEEEbiographynophoto}[1]{%
-% Make an entry into the table of contents only if we have not done so before
-\if@biographyTOCentrynotmade%
-% link labels to the biography counter so hyperref will jump
-% to the biography, not the previous section
-\setcounter{biography}{-1}%
-\refstepcounter{biography}%
-\addcontentsline{toc}{section}{Biographies}%
-\global\@biographyTOCentrynotmadefalse%
-\fi%
-% one more biography
-\refstepcounter{biography}%
-% Make an entry for this name into the table of contents 
-\addcontentsline{toc}{subsection}{#1}%
-\normalfont\biographyfont\interlinepenalty500%
-\vskip 4\baselineskip plus 1fil minus 0\baselineskip%
-\parskip=0pt\par%
-\noindent{\biographyheadfont\uppercase{#1}\ }\@IEEEgobbleleadPARNLSP}{\relax\par\normalfont}
-
-\def\EOD{\ifaccesseditors\else\mbox{}\newline\hspace*{\fill}\mbox{\rotatebox{90}{\includegraphics[width=0.5em]{bullet.png}}}\fi\global\eoddefinedtrue}
-
-\ifaccesseditors
-\def\bioaddressfont{\sffamily\putfont{T1}{formata}{n}{n}{8}{10}}
-\def\bionamefont{\sffamily\fontencoding{T1}\fontseries{m}\fontsize{10}{12}\selectfont}%formata medium 8pt
-\let\biobodyfont\biographyfont
-%\def\biosc#1{{\fontsize{7}{12}\selectfont\MakeUppercase{#1}}}
-
-%Biography with a photograph for accesseditors
-\newenvironment{ebbiography}[3][]{\normalfont\biobodyfont%
-\unitlength 1in\parskip=0pt\par\parindent 1em\interlinepenalty500%
-% we need enough space to support the hanging indent
-% the nominal value of the spacer
-% and one extra line for good measure
-\@IEEEtrantmpdimenA=\@IEEEBIOhangdepth%
-\advance\@IEEEtrantmpdimenA by \@IEEEBIOskipN%
-\advance\@IEEEtrantmpdimenA by 1\baselineskip%
-% if this page does not have enough space, break it and lets start
-% with a new one
-\@IEEEtranneedspace{\@IEEEtrantmpdimenA}{\relax}%
-% nominal spacer can strech, not shrink use 1fil so user can out stretch with \vfill
-%\vskip \@IEEEBIOskipN plus 1fil minus 0\baselineskip%
-% the default box for where the photo goes
-\def\@IEEEtempbiographybox{{\setlength{\fboxsep}{0pt}\framebox{\begin{minipage}[b][\@IEEEBIOphotodepth][c]{\@IEEEBIOphotowidth}\centering PLACE\\ PHOTO\\ HERE \end{minipage}}}}%
-%
-% detect if the optional argument was supplied, this requires the
-% \@ifmtarg command as defined in the appendix section above
-% and if so, override the default box with what they want
-\@ifmtarg{#1}{\relax}{\def\@IEEEtempbiographybox{\mbox{\begin{minipage}[b][\@IEEEBIOphotodepth][c]{\@IEEEBIOphotowidth}%
-\centering%
-#1%
-\end{minipage}}}}% end if optional argument supplied
-% Make an entry into the table of contents only if we have not done so before
-% Make an entry for this name into the table of contents 
-\addcontentsline{toc}{subsection}{#2}%
-% V1.6 properly handle if a new paragraph should occur while the
-% hanging indent is still active. Do this by redefining \par so
-% that it will not start a new paragraph. (But it will appear to the
-% user as if it did.) Also, strip any leading pars, newlines, or spaces.
-\let\@IEEEBIOORGparCMD=\par% save the original \par command
-\edef\par{\hfil\break\indent}% the new \par will not be a "real" \par
-\settoheight{\@IEEEtrantmpdimenA}{\@IEEEtempbiographybox}% get height of biography box
-\@IEEEtrantmpdimenB=\@IEEEBIOhangdepth%
-\@IEEEtrantmpcountA=\@IEEEtrantmpdimenB% countA has the hang depth
-\divide\@IEEEtrantmpcountA by \baselineskip%  calculates lines needed to produce the hang depth
-\advance\@IEEEtrantmpcountA by 1% ensure we overestimate
-% set the hanging indent
-\hangindent\@IEEEBIOhangwidth%
-\hangafter-\@IEEEtrantmpcountA%
-% reference the top of the photo area to the top of a capital T
-\settoheight{\@IEEEtrantmpdimenB}{\mbox{T}}%
-% set the photo box, give it zero width and height so as not to disturb anything
-\noindent\makebox[0pt][l]{\hspace{-\@IEEEBIOhangwidth}\raisebox{\@IEEEtrantmpdimenB}[0pt][0pt]{\raisebox{-\@IEEEBIOphotodepth}[0pt][0pt]{\@IEEEtempbiographybox}}}%
-% now place the author name and begin the bio text
-\noindent{\rightskip 0pt plus 1fil\bionamefont#2\\\bioaddressfont#3}\@IEEEgobbleleadPARNLSP}{\relax\let\par=\@IEEEBIOORGparCMD\par%
-% 7/2001 V1.5 detect when the biography text is shorter than the photo area
-% and pad the unused area - preventing a collision from the next biography entry
-% MDS
-\ifnum \prevgraf <\@IEEEtrantmpcountA\relax% detect when the biography text is shorter than the photo
-    \advance\@IEEEtrantmpcountA by -\prevgraf% calculate how many lines we need to pad
-    \advance\@IEEEtrantmpcountA by -1\relax% we compensate for the fact that we indented an extra line
-    \@IEEEtrantmpdimenA=\baselineskip% calculate the length of the padding
-    \multiply\@IEEEtrantmpdimenA by \@IEEEtrantmpcountA%
-    \noindent\rule{0pt}{\@IEEEtrantmpdimenA}% insert an invisible support strut
-\fi%
-\par\biobodyfont}
-
-%Biography without photograph for accesseditors
-% added biography without a photo environment
-\newenvironment{ebbiographynophoto}[1]{%
-% Make an entry into the table of contents only if we have not done so before
-% Make an entry for this name into the table of contents 
-\addcontentsline{toc}{subsection}{#1}%
-\normalfont\biobodyfont\interlinepenalty500%
-\vspace{\baselineskip}%plus 1fil minus 0\baselineskip%
-\parskip=0pt\par%
-\noindent{{\biographyheadfont #1}\ }\@IEEEgobbleleadPARNLSP}{\relax\par\biobodyfont}
-
-\newenvironment{editorialbiography}[4][]{%
-\begin{ebbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{#1}}]{#2}{#3}
-\end{ebbiography}\par\begin{ebbiographynophoto}{#4}}
-    {\end{ebbiographynophoto}\vspace{2\baselineskip}}
-\fi
 
 \AtEndDocument{%
   \ifjtehm\else%
@@ -939,7 +497,6 @@
 \AtBeginDocument{%
 \gdef\operator@encoding{T1}
 \gdef\encodingdefault{T1}
-%\def\it{\fontencoding{T1}\selectfont}
 \def\bf{\fontencoding{T1}\fontseries{b}\selectfont}
 \def\rm{\fontencoding{T1}\selectfont}
 }

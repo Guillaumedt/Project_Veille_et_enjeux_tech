@@ -27,20 +27,14 @@
 (e-mail: maryam.dollet@edu.devinci.fr)}
 \address[4]{ESILV \& EMLV, 92400 Courbevoie, France
 (e-mail: iswarya.sivasubramaniam@edu.devinci.fr)}
-\tfootnote{Ce travail a été supporté en partie par l'ESILV.}
 
-\begin{abstract}
-La qualité d’image est un concept subjectif qui reflète la perception d’un observateur sur l’adéquation d’une image pour un usage spécifique. C’est un domaine crucial dans de nombreux secteurs, notamment la photographie, la cinématographie, la télévision, et plus récemment, les médias numériques.
-Dans un monde où la visualisation est cruciale, l'évaluation de la qualité des images est devenue essentielle. En fournissant des indicateurs objectifs sur la performance des algorithmes de traitement d'image, les métriques dédiées à cette évaluation jouent un rôle essentiel. Ces mesures vont au-delà de la simple perception visuelle, englobant des aspects tels que la netteté, la fidélité des couleurs et la préservation des détails, offrant ainsi un éclairage essentiel pour améliorer les technologies visuelles.
-\end{abstract}
-
-\begin{keywords}
-intelligence artificielle, image, métriques d'évaluation
-\end{keywords}
-
-\titlepgskip=-15pt
+\titlepgskip=-90pt
 
 \maketitle
+
+\section*{Introduction}
+\PARstart{L}{a} qualité d’image est un concept subjectif qui reflète la perception d’un observateur sur l’adéquation d’une image pour un usage spécifique. C’est un domaine crucial dans de nombreux secteurs, notamment la photographie, la cinématographie, la télévision, et plus récemment, les médias numériques.
+Dans un monde où la visualisation est cruciale, l'évaluation de la qualité des images est devenue essentielle. En fournissant des indicateurs objectifs sur la performance des algorithmes de traitement d'image, les métriques dédiées à cette évaluation jouent un rôle essentiel. Ces mesures vont au-delà de la simple perception visuelle, englobant des aspects tels que la netteté, la fidélité des couleurs et la préservation des détails, offrant ainsi un éclairage essentiel pour améliorer les technologies visuelles.
 
 \section{Rappel de la problématique}
 \PARstart{C}{omment} évaluer la qualité des images produites par les modèles génératifs de création d’images ?
@@ -67,18 +61,15 @@ Le cas qui nous intéresse pour répondre à notre problématique est le premier
 
 \subsection{Explication du fonctionnement des algos (papier par papier)}
 
-\PARstart{S}{tyleGAN :} L'article "Analyzing and Improving the Image Quality of StyleGAN" se penche sur plusieurs aspects clés de l'architecture StyleGAN, notamment les artefacts générés par la normalisation. Les chercheurs identifient des anomalies, telles que les artefacts en forme de goutte d'eau, et proposent des ajustements à l'architecture pour les éliminer. Un point central concerne la régularisation de la longueur du chemin, soulignant son impact sur la qualité perçue des images générées. Une autre composante abordée est la croissance progressive, un élément du succès de StyleGAN. Les chercheurs proposent des alternatives architecturales, telles que MSG-GAN avec des connexions de saut et des réseaux résiduels, démontrant leur effet bénéfique sur des métriques telles que la PPL et le FID. Des considérations pratiques telles que la projection d'images dans l'espace latent et l'attribution d'images générées à leur source sont également développées pour améliorer la compréhension et l'utilisation de StyleGAN.
+\PARstart{S}{tyleGAN :} Les chercheurs identifient des anomalies, telles que les artefacts en forme de goutte d'eau, et proposent des ajustements à l'architecture pour les éliminer. Un point central concerne la régularisation de la longueur du chemin, soulignant son impact sur la qualité perçue des images générées. Une autre composante abordée est la croissance progressive, un élément du succès de StyleGAN. Les chercheurs proposent des alternatives architecturales, telles que MSG-GAN avec des connexions de saut et des réseaux résiduels, démontrant leur effet bénéfique sur des métriques telles que la PPL et le FID. Des considérations pratiques telles que la projection d'images dans l'espace latent et l'attribution d'images générées à leur source sont également développées pour améliorer la compréhension et l'utilisation de StyleGAN.
 
 \PARstart{B}{RISQUE :} Certaines métriques comme le coefficient de luminance normalisé, permettent de différencier une image générée artificiellement d’une image dite naturelle : Ce coefficient suit une distribution gaussienne pour une image naturelle contrairement à une image créée artificiellement. « Les écarts par rapport à la régularité des statistiques naturelles, lorsqu'ils sont quantifiés de manière appropriée, permettent de concevoir des outils de mesure de la qualité de l'image ». Quantifiées de la bonne manière, ces métriques permettent de concevoir des algorithmes capables d'évaluer la qualité perceptuelle d'une image sans avoir besoin d'une image de référence. Le modèle proposé par cet article est un modèle spatial basé sur les statistiques naturelles de scène (NSS). Un modèle spatial veut dire qu’il n'y a pas de transformation des informations de l'image dans un autre domaine (par exemple une transformation en échelles de fréquences (comme les ondelettes et la DCT (Discrete cosine transform)). Pour déterminer les opinions humaines sur la qualité visuelle d’une image, on peut pratiquer des études humaines à grande échelle et on en déduit un score d’opinion moyen (MOS) ou un score d'opinion moyen différentiel (DMOS). L'objectif de l'algorithme est de prédire les scores de qualité des images de manière à ce que les scores produits par l'algorithme correspondent bien à l'opinion humaine. L’algorithme proposé par cet article, le No Reference IQA algorithm (BRISQUE), utilise un cadre de modèle NSS de normalité locale. Il quantifie la "naturalité" de l’image à l'aide des paramètres du modèle : Par exemple avec l’aide des coefficients de luminance localement normalisés. C'est une évaluation de la sensation de lumière renvoyés par des pixels de l’image par rapport à leurs voisins.
 
 \PARstart{M}{ANIQA :} Pour le fonctionnement de l’algorithme MANIQA, les métriques des images sont tout d’abord extraites via ViT (Vision Transformer Model). Pour renforcer les interactions globales (relations à l’échelle de l’image entière) et locales (relations à une échelle locale), cet algorithme utilise un bloc d'attention transposée (TAB) et un bloc transformateur d'échelle (SSTB). Ces deux modules appliquent des mécanismes d'attention à travers la dimension des canaux (chaque canal extrait certaines caractéristiques de l’image auquel l’algorithme prête plus ou moins d’attention) et la dimension spatiale (sur des zones différentes de l’image), respectivement. En adoptant cette approche multidimensionnelle, les modules renforcent de manière collaborative les interactions entre diverses régions des images, à l'échelle globale aussi bien qu'à l'échelle locale. En conclusion, MANIQA utilise une structure à double branche pour prédire la qualité de chaque partie spécifique de l'image, appelée "patch". Cette structure évalue la qualité pondérée de chaque patch et, en fonction de ces évaluations, prédit le score final de l'image. Les résultats des expériences montrent que MANIQA surpasse les méthodes les plus avancées sur quatre ensembles de données standard : LIVE, TID2013, CSIQ, et KADID-10K). 
-\newline
-\newline
-\newline
 
 \subsection{Critiques des algos (avantages/inconvénients)}
 
-\PARstart{S}{tyleGAN :} Dans l'article "Analyzing and Improving the Image Quality of StyleGAN", les chercheurs identifient et résolvent efficacement des problèmes liés aux artefacts de normalisation et à la croissance progressive, contribuant ainsi à l'amélioration globale de la qualité des images générées par StyleGAN. Les propositions architecturales alternatives, telles que les connexions de saut et les réseaux résiduels, démontrent des améliorations significatives dans les métriques de performance telles que la PPL et le FID. Cependant, une critique potentielle pourrait être liée à la complexité accrue des architectures proposées, ce qui pourrait nécessiter une compréhension approfondie et des ressources computationnelles supplémentaires. Malgré les améliorations substantielles avec StyleGAN2, des défis subsistent, notamment en ce qui concerne l'attribution des images à leur source, et les chercheurs reconnaissent la nécessité de réduire davantage les exigences en données d'entraînement pour les GANs. En fin de compte, l'article offre une contribution importante en proposant des solutions pratiques pour surmonter les limitations de StyleGAN tout en ouvrant des pistes pour des améliorations futures. 
+\PARstart{S}{tyleGAN :} Les chercheurs identifient et résolvent efficacement des problèmes liés aux artefacts de normalisation et à la croissance progressive, contribuant ainsi à l'amélioration globale de la qualité des images générées par StyleGAN. Les propositions architecturales alternatives, telles que les connexions de saut et les réseaux résiduels, démontrent des améliorations significatives dans les métriques de performance telles que la PPL et le FID. Cependant, une critique potentielle pourrait être liée à la complexité accrue des architectures proposées, ce qui pourrait nécessiter une compréhension approfondie et des ressources computationnelles supplémentaires. Malgré les améliorations substantielles avec StyleGAN2, des défis subsistent, notamment en ce qui concerne l'attribution des images à leur source, et les chercheurs reconnaissent la nécessité de réduire davantage les exigences en données d'entraînement pour les GANs. En fin de compte, l'article offre une contribution importante en proposant des solutions pratiques pour surmonter les limitations de StyleGAN tout en ouvrant des pistes pour des améliorations futures. 
 
 \PARstart{B}{RISQUE} a une très faible complexité de calcul, ce qui le rend bien adapté aux applications en temps réel. Les caractéristiques de BRISQUE avec les coefficients de luminance normalisés peuvent permettre aussi de déterminer la qualité d’une image lorsqu’elle est altérée (par exemple une déformation). Cette méthode est également décrite comme très efficace pour augmenter des algorithmes de réduction de bruit dans les images. Cependant d’autres études ont permis de découvrir que BRISDQUE ainsi que les autres les algorithmes d’IQA existants tels que PSNR ont de la marge pour améliorer leur stabilité. BRISQUE est moins bon que PSNR lorsqu'il s'agit de mesurer des ensembles d'images corrompues par deux facteurs. BRISQUE n’est également pas performant lors de l'analyse comparative d'ensembles d'images tournées. 
 
@@ -125,7 +116,7 @@ Le cas qui nous intéresse pour répondre à notre problématique est le premier
 \end{tabular}
 \end{table}
 
-Ici, plus le coefficient de corrélation s’approche de 1, plus les mesure de qualité de l’image des différents algorithmes sont correctes 
+Ici, plus le coefficient de corrélation s’approche de 1, plus les mesure de qualité de l’image des différents algorithmes sont correctes.
 
 \PARstart{M}{ANIQA :} Voici une comparaison entre MANIQA et les algorithmes NR IQA de l’état de l’art sur quatre dataset différents. Les scores en gras, en noir et en bleu, représentent respectivement les meilleures et les deuxièmes meilleures performances.
 
@@ -213,12 +204,6 @@ MANIQA est quant à lui disponible en open source sur un repos GitHub, rendant �
 \subsection{Explication du fonctionnement (notre expérimentation)}
 
 \PARstart{P}{our} notre expérimentation, nous avons généré des images par Crayion, Deep AI et Design Canva. Pour Deep AI, nous avons généré 2 versions : une version de base et une version améliorée. Pour générer nos images, nous avons utilisé la phrase suivante : « a beautiful woman standing atop a mountain range with a breezy view ». Nous avons également récupéré une vraie photo. Nous avons finalement noté toutes ces images grâce à BRISQUE et MANIQA. Nous avons également fait noter ces images de 1 à 10 par des humains, et avons fait la moyenne de celles-ci.
-\newline
-\newline
-\newline
-\newline
-\newline
-\newline
 
 \subsection{Les résultats de l'expérimentation}
 
@@ -255,11 +240,22 @@ $photo > design\textunderscore canva > deep\textunderscore ai > deep\textundersc
 
 MANIQA quant à lui donné une très bonne note à l’image design canva qui pourtant n’était pas bien notée ni par BRISQUE, ni par les humains. Il est vrai que la composition de l’image globale fait sens mais certains détails de l’image posent problème, ce qui a visiblement été pénalisé par BRISQUE et les humains mais par MANIQA. 
 
-Il est également intéressant de noter que MANIQA a donné une meilleure note à la photo deep ai qu’à sa version améliorée deep ai enhanced. Celle-ci est plus nette (plus de pixels), et a été retravaillée par l’algorithme de génération d’images.
+Il est également intéressant de noter que MANIQA a donné une meilleure note à la photo deep ai qu’à sa version améliorée deep ai enhanced. Celle-ci est plus nette (plus de pixels), et a été retravaillée par l’algorithme de génération d’images. 
+\newline
+
+Vous pouvez tester sur notre GitHub : \newline \textbf{https://github.com/Guillaumedt/Projet\textunderscore Veille\textunderscore et\textunderscore enjeux}
 
 \section{Bilan personnel}
 
-\PARstart{L}{es} algorithmes découverts lors de cette analyse d’articles scientifiques répondent bien à notre problématique d’évaluation de la qualité d’images sans référence en apportant un plus par rapport à leur état de l’art. Cependant, ces algorithmes ne sont pas parfaits et présentent des possibilités d’amélioration notables.  
+\PARstart{L}{es} algorithmes découverts lors de cette analyse d'articles scientifiques répondent bien à notre problématique d'évaluation de la qualité d'images sans référence, apportant un plus par rapport à leur état de l'art. Cependant, ces algorithmes ne sont pas parfaits et présentent des possibilités d'amélioration notables.
+
+\PARstart{N}{ous} n'avions pas de notions préalables sur le sujet des métriques d'évaluation des images. Cette expérience nous a permis de comprendre l'importance de celui-ci, notamment dans la génération d'images. Les différents papiers nous montrent la constante évolution des algorithmes dans ce domaine.
+
+\PARstart{G}{râce} à ce module, nous avons appris à reconnaître un bon papier scientifique selon des critères bien définis. En effet, nous sommes partis d'un nombre élevé d'articles scientifiques. Nous avons par la suite choisi les meilleurs sur la base des auteurs, des références et des citations. De plus, nous avons dû mettre en place nos propres critères afin de choisir les papiers les plus pertinents pour notre problématique. Nous avons découvert des sites internet pertinents qui ont orienté le choix et la notation des articles scientifiques.
+
+\PARstart{C}{e} module nous a aussi permis de comprendre que nous avions les compétences nécessaires pour assimiler des papiers scientifiques sur des sujets assez délicats. Lors de la phase d'expérimentation, nous avons appris à comprendre un code complexe qui a été fourni par les auteurs. Nous l'avons adapté afin d'effectuer nos tests et d'obtenir des résultats sur nos données.
+
+\PARstart{E}{nfin,} nous avons appris à utiliser LaTeX, très utilisé dans le domaine de la recherche, notamment grâce à l'intégration des formules mathématiques. En effet, LaTeX est reconnu pour répondre aux exigences des éditeurs scientifiques.
 
 \begin{thebibliography}{00}
 
