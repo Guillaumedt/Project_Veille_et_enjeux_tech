@@ -397,8 +397,8 @@
      }}
   }
 \else
-  \def\headerlogo{\raisebox{-2pt}{\includegraphics[width=7.61pc]{Logo.png}}}
-  \def\headerlogoall{\raisebox{-2pt}{\includegraphics[width=7.61pc]{notaglineLogo.png}}}
+  \def\headerlogo{\raisebox{-2pt}{\includegraphics[width=7.61pc]{full_logo.png}}}
+  \def\headerlogoall{\raisebox{-2pt}{\includegraphics[width=7.61pc]{small_logo.png}}}
   \def\ps@titlepage{%
     \def\@oddhead{\parbox[t]{\textwidth}{\mbox{}\\[-6.3mm]\mbox{}\nheaderfont\color{accessblue}\headName\hfill\headerlogo{\raisebox{-2pt}{\,}}\color{black}\vspace*{-1.5mm}\par\hrulefill}}
     \def\@evenhead{\parbox[t]{\textwidth}{\mbox{}\\[-6.3mm]\mbox{}\headerlogo\hfill\nheaderfont\color{accessblue}\headName{\raisebox{-2pt}{\,}}\color{black}\vspace*{-1.5mm}\par\hrulefill}}

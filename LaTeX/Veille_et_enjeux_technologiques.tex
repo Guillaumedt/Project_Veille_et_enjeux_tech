@@ -4,6 +4,8 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage{multirow}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -48,37 +50,216 @@ Nous explorerons les critères permettant de juger la fidélité perceptive et l
 
 \subsection{Information sur le papier et en quoi ça répond à la problématique}
 
-abc
+\PARstart{S}{tyleGAN :} L'article "Analyzing and Improving the Image Quality of StyleGAN" propose une analyse approfondie de l'architecture de génération d'images StyleGAN, mettant en lumière ses caractéristiques et identifiant des aspects susceptibles d'être améliorés. Les chercheurs, affiliés à NVIDIA, abordent la problématique de la qualité des images générées par les modèles génératifs en se concentrant sur plusieurs aspects clés de StyleGAN, tels que les artefacts de normalisation, les problèmes liés à la croissance progressive, et la sous-utilisation de la résolution. L'objectif principal est d'optimiser différentes métriques présentes dans la littérature afin d'orienter la génération d'images vers une amélioration constante de leur qualité. En identifiant les lacunes de StyleGAN et en proposant des modifications spécifiques, les chercheurs contribuent significativement à l'avancement de la compréhension et de l'amélioration des modèles génératifs d'images.
+
+\PARstart{B}{risque :} Il y a 3 types de modèles d’IQA (Image Quality Assessment) :
+\begin{itemize}
+    \item Objective blind or No reference (NR) image quality assessment (IQA)
+    \item À l'opposé, il y a les algorithmes d'évaluation (FR) pour full référence, qui consistent à donner à l'algorithme une image parfaite d'une image de départ non déformée.
+    \item Entre les deux, il y a les algorithmes (RR) pour reduced référence, où l'on donne des informations concernant l'image de départ.
+\end{itemize}
+
+Le cas qui nous intéresse pour répondre à notre problématique est le premier car nous sommes dans un cas où l’on cherche à déterminer la qualité d’images générées par des algorithmes. Or, l’objectif de l’algorithme proposé par cet article BRISQUE est de calculer efficacement la qualité perceptuelle d’une image pour un être humain (sans référence). Il met en avant la perception que l’observateur a de l’image et tente de l’évaluer à l’aide de signaux visibles et quantifiables tels que la luminance. Ceci correspond donc bien à un cas d’IQA NR et répond donc bien à la problématique d’évaluation de la qualité d’images crées artificiellement. 
+
+\PARstart{M}{ANIQA :} Nous avons décidé de choisir ce papier au vu de à sa notoriété et de son contenu, qui s’inscrit bien dans la Mesure de Qualité d’image sans référence. L’équipe qui a développé cet algorithme est en effet le gagnant du défi sur la qualité des images sans référence au NTIRE 2022. Dans ce papier, les auteurs présentent leur approche pour créer un algorithme capable d’Evaluer la qualité des images dégradées lors de différentes transformations comme la compression ou bien lors des transferts. Selon les auteurs, les méthodes actuelles d’évaluation de qualité des images non-référentielles ont une performance non satisfaisante à cause de l’écart qu’il y a entre le vrai système visuel de l’humain et la vision de la machine. Les humains vont se focaliser sur les détails plus réalistes tandis que les machines se focalisent sur plus de détails comme la dégradation de la qualité des images.  
+
+\PARstart{A}{survey :} L'article "Perceptual image quality assessment: a survey" fournit une analyse approfondie de l'évaluation de la qualité d'image, couvrant une gamme étendue de sujets allant des mesures traditionnelles aux tendances émergentes. Elle commence par une revue des bases de données d'évaluation subjective, suivi par une exploration des mesures de qualité d'image en référence complète (FR), en référence réduite (RR) et sans référence (NR). En ce qui concerne l'évaluation des modèles génératifs de création d'images, l'article fournit un aperçu approfondi des métriques traditionnelles et émergentes utilisées dans le domaine. La compréhension de ces méthodes peut être essentiel pour aborder notre problématique liée à l'évaluation de la qualité des images générées par des modèles génératifs, nous donnant ainsi les outils nécessaires pour évaluer et améliorer vos créations visuelles. 
 
 \subsection{Explication du fonctionnement des algos (papier par papier)}
 
-abc
+\PARstart{S}{tyleGAN :} L'article "Analyzing and Improving the Image Quality of StyleGAN" se penche sur plusieurs aspects clés de l'architecture StyleGAN, notamment les artefacts générés par la normalisation. Les chercheurs identifient des anomalies, telles que les artefacts en forme de goutte d'eau, et proposent des ajustements à l'architecture pour les éliminer. Un point central concerne la régularisation de la longueur du chemin, soulignant son impact sur la qualité perçue des images générées. Une autre composante abordée est la croissance progressive, un élément du succès de StyleGAN. Les chercheurs proposent des alternatives architecturales, telles que MSG-GAN avec des connexions de saut et des réseaux résiduels, démontrant leur effet bénéfique sur des métriques telles que la PPL et le FID. Des considérations pratiques telles que la projection d'images dans l'espace latent et l'attribution d'images générées à leur source sont également développées pour améliorer la compréhension et l'utilisation de StyleGAN.
+
+\PARstart{B}{RISQUE :} Certaines métriques comme le coefficient de luminance normalisé, permettent de différencier une image générée artificiellement d’une image dite naturelle : Ce coefficient suit une distribution gaussienne pour une image naturelle contrairement à une image créée artificiellement. « Les écarts par rapport à la régularité des statistiques naturelles, lorsqu'ils sont quantifiés de manière appropriée, permettent de concevoir des outils de mesure de la qualité de l'image ». Quantifiées de la bonne manière, ces métriques permettent de concevoir des algorithmes capables d'évaluer la qualité perceptuelle d'une image sans avoir besoin d'une image de référence. Le modèle proposé par cet article est un modèle spatial basé sur les statistiques naturelles de scène (NSS). Un modèle spatial veut dire qu’il n'y a pas de transformation des informations de l'image dans un autre domaine (par exemple une transformation en échelles de fréquences (comme les ondelettes et la DCT (Discrete cosine transform)). Pour déterminer les opinions humaines sur la qualité visuelle d’une image, on peut pratiquer des études humaines à grande échelle et on en déduit un score d’opinion moyen (MOS) ou un score d'opinion moyen différentiel (DMOS). L'objectif de l'algorithme est de prédire les scores de qualité des images de manière à ce que les scores produits par l'algorithme correspondent bien à l'opinion humaine. L’algorithme proposé par cet article, le No Reference IQA algorithm (BRISQUE), utilise un cadre de modèle NSS de normalité locale. Il quantifie la "naturalité" de l’image à l'aide des paramètres du modèle : Par exemple avec l’aide des coefficients de luminance localement normalisés. C'est une évaluation de la sensation de lumière renvoyés par des pixels de l’image par rapport à leurs voisins.
+
+\PARstart{M}{ANIQA :} Pour le fonctionnement de l’algorithme MANIQA, les métriques des images sont tout d’abord extraites via ViT (Vision Transformer Model). Pour renforcer les interactions globales (relations à l’échelle de l’image entière) et locales (relations à une échelle locale), cet algorithme utilise un bloc d'attention transposée (TAB) et un bloc transformateur d'échelle (SSTB). Ces deux modules appliquent des mécanismes d'attention à travers la dimension des canaux (chaque canal extrait certaines caractéristiques de l’image auquel l’algorithme prête plus ou moins d’attention) et la dimension spatiale (sur des zones différentes de l’image), respectivement. En adoptant cette approche multidimensionnelle, les modules renforcent de manière collaborative les interactions entre diverses régions des images, à l'échelle globale aussi bien qu'à l'échelle locale. En conclusion, MANIQA utilise une structure à double branche pour prédire la qualité de chaque partie spécifique de l'image, appelée "patch". Cette structure évalue la qualité pondérée de chaque patch et, en fonction de ces évaluations, prédit le score final de l'image. Les résultats des expériences montrent que MANIQA surpasse les méthodes les plus avancées sur quatre ensembles de données standard : LIVE, TID2013, CSIQ, et KADID-10K). 
+\newline
+\newline
+\newline
 
 \subsection{Critiques des algos (avantages/inconvénients)}
 
-abc
+\PARstart{S}{tyleGAN :} Dans l'article "Analyzing and Improving the Image Quality of StyleGAN", les chercheurs identifient et résolvent efficacement des problèmes liés aux artefacts de normalisation et à la croissance progressive, contribuant ainsi à l'amélioration globale de la qualité des images générées par StyleGAN. Les propositions architecturales alternatives, telles que les connexions de saut et les réseaux résiduels, démontrent des améliorations significatives dans les métriques de performance telles que la PPL et le FID. Cependant, une critique potentielle pourrait être liée à la complexité accrue des architectures proposées, ce qui pourrait nécessiter une compréhension approfondie et des ressources computationnelles supplémentaires. Malgré les améliorations substantielles avec StyleGAN2, des défis subsistent, notamment en ce qui concerne l'attribution des images à leur source, et les chercheurs reconnaissent la nécessité de réduire davantage les exigences en données d'entraînement pour les GANs. En fin de compte, l'article offre une contribution importante en proposant des solutions pratiques pour surmonter les limitations de StyleGAN tout en ouvrant des pistes pour des améliorations futures. 
+
+\PARstart{B}{RISQUE} a une très faible complexité de calcul, ce qui le rend bien adapté aux applications en temps réel. Les caractéristiques de BRISQUE avec les coefficients de luminance normalisés peuvent permettre aussi de déterminer la qualité d’une image lorsqu’elle est altérée (par exemple une déformation). Cette méthode est également décrite comme très efficace pour augmenter des algorithmes de réduction de bruit dans les images. Cependant d’autres études ont permis de découvrir que BRISDQUE ainsi que les autres les algorithmes d’IQA existants tels que PSNR ont de la marge pour améliorer leur stabilité. BRISQUE est moins bon que PSNR lorsqu'il s'agit de mesurer des ensembles d'images corrompues par deux facteurs. BRISQUE n’est également pas performant lors de l'analyse comparative d'ensembles d'images tournées. 
+
+\PARstart{M}{ANIQA} propose une approche innovante de l’évaluation de la qualité des images sans référence avec un réseau d’attention multidimensionnel. En exploitant ce réseau, l'algorithme démontre une application appropriée pour les tâches d’évaluation de la qualité des images perceptuelles. Les résultats expérimentaux utilisant une base de données standard montrent des performances supérieures par rapport aux méthodes existantes, notamment sur les biais créés par les GAN (Generative Adversarial Networks). En particulier, MANIQA excelle dans la catégorie de distorsion GAN basée sur PIPAL du défi d'évaluation de la qualité d'image perceptuelle NTIRE 2022. Malgré le succès de MANIQA,  des améliorations sont encore possibles ; En général, toutes les distorsions introduites par les GAN ne sont pas nécessairement problématiques. Par conséquent, il est important de définir des types spécifiques de distorsions GAN (par exemple les textures irréelles plaisantes, textures irréelles déplaisantes, etc.) pour améliorer encore l’efficacité de l’algorithme.  
+
+\PARstart{A}{survey :} L'article se penche sur les algorithmes d'évaluation de la qualité d'image sans référence (NR IQA), visant à prédire la qualité des images sans accès à l'image de référence originale. Elle distingue deux catégories d'algorithmes NR IQA : les mesures spécifiques à la distorsion et les méthodes générales. Les mesures spécifiques analysent les artefacts liés à une distorsion particulière, tandis que les méthodes générales utilisent des caractéristiques de qualité générales. Les deux algorithmes qui se distinguent par leurs performances exceptionnelles dans la prédiction de la qualité d’image sans référence (NR IQA) sur tous les datasets testés sont DESIQUE (Derivative Statistics-based Quality Evaluator) et HOSA (High Order Statistics Aggregation). DESIQUE est un algorithme d'évaluation de qualité d'image sans référence qui utilise un modèle statistique basé sur les dérivées logarithmiques des scènes naturelles. HOSA fonctionne en extrayant des caractéristiques locales d'images, construisant un codebook via K-means, puis utilisant la régression par vecteurs de support pour établir la relation entre ces caractéristiques et les scores d'opinions subjectives, assurant une évaluation compétitive de la qualité d'image.  
 
 \subsection{Résultats expérimentaux : Description des datasets utilisés et résultats obtenus}
 
-abc
+\PARstart{S}{tyleGAN :} Le dataset LSUN CAR possède 57 millions d’images, LSUN CAT 88 millions, LSUN CHURCH 48 millions et LSUN HORSE 100 millions. La Fréchet Inception Distance (FID) mesure la similitude entre les caractéristiques d'images réelles et générées, tandis que la Perceptual Path Length (PPL) évalue la régularité des transitions dans l'espace latent. Pour les deux métriques, des valeurs plus basses indiquent une meilleure qualité, signifiant une génération plus proche des images réelles et des transitions plus régulières. 
+
+\begin{table}[h]
+\caption{Comparaison entre StyleGAN et StyleGAN2}
+\label{table}
+\setlength{\tabcolsep}{12pt}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Dataset} & \multicolumn{2}{c|}{\textbf{StyleGAN}} & \multicolumn{2}{c|}{\textbf{StyleGAN2}} \\
+    \cline{2-5}
+    & \textbf{FID} & \textbf{PPL} & \textbf{FID} & \textbf{PPL} \\
+    \hline
+    LSUN CAR & 3.27 & 1485 & 2.32 & 416 \\
+    LSUN CAT & 8.53 & 924 & 6.93 & 439 \\
+    LSUN CHURCH & 4.21 & 742 & 3.86 & 342 \\
+    LSUN HORSE & 3.83 & 1405 & 3.43 & 338 \\
+    \hline
+\end{tabular}
+\end{table}
+
+\PARstart{B}{RISQUE :} Les tests de l’algorithme BRISQUE ont été effectués sur les datasets LIVE IQA database et TID2008 database. L’algorithme a d’abord été entraîné sur la database LIVE IQA pour être ensuite testé sur les images de la database TID2008. La base de données TID se compose de 25 images de référence et de 1700 images déformées réparties en 17 catégories de distorsion. Étant donné qu'il y a seulement 24 images naturelles, et que l’algorithme est basé sur les statistiques des images naturelles, l'approche est testée sur ces 24 images. En outre, bien qu'il existe 17 catégories de distorsion, les tests de BRISQUE sont effectués uniquement sur les distorsions pour lesquelles il est entraîné : JPEG, compression JPEG2000 (JP2K), bruit blanc additif (WN) et flou gaussien (blur). La distorsion FF n'existe pas dans la base de données TID. Les résultats de l'application de BRISQUE sur TID sont présentés il est également indiqué les performances du PSNR et du SSIM à des fins de comparaison. Il est clair que BRISQUE obtient de bons résultats en termes de corrélation avec la perception humaine de la qualité et que les performances ne dépendent pas de la base de données.
+
+\begin{table}[h]
+\caption{Coefficients de corrélation ordonnée de rang Spearman (SROCC) sur la base des données TID2008}
+\label{table}
+\setlength{\tabcolsep}{9pt}
+\begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \textbf{ } & \textbf{JP2K} & \textbf{JPEG} & \textbf{WN} & \textbf{Gblur} & \textbf{All} \\
+    \hline
+    \textbf{PSNR} & 0.825 & 0.876 & 0.918 & 0.934 & 0.870 \\
+    \textbf{SSIM} & 0.963 & 0.935 & 0.817 & 0.960 & 0.902 \\
+    \textbf{BRISQUE} & 0.832 & 0.924 & 0.829 & 0.881 & 0.896 \\
+    \hline
+\end{tabular}
+\end{table}
+
+Ici, plus le coefficient de corrélation s’approche de 1, plus les mesure de qualité de l’image des différents algorithmes sont correctes 
+
+\PARstart{M}{ANIQA :} Voici une comparaison entre MANIQA et les algorithmes NR IQA de l’état de l’art sur quatre dataset différents. Les scores en gras, en noir et en bleu, représentent respectivement les meilleures et les deuxièmes meilleures performances.
+
+\begin{table}[h]
+\caption{Comparaison des performances}
+\label{table}
+\setlength{\tabcolsep}{0.3pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \multirow{2}{*}{\textbf{ }} & \multicolumn{2}{c|}{\textbf{LIVE}} & \multicolumn{2}{c|}{\textbf{CSIQ}} & \multicolumn{2}{c|}{\textbf{TID2013}} & \multicolumn{2}{c|}{\textbf{KADID-10K}} \\
+    \cline{2-9}
+    & \textbf{PLCC} & \textbf{SROCC} & \textbf{PLCC} & \textbf{SROCC} & \textbf{PLCC} & \textbf{SROCC} & \textbf{PLCC} & \textbf{SROCC} \\
+    \hline
+    \textbf{DIIVINE} & 0.908 & 0.892 & 0.776 & 0.804 & 0.567 & 0.643 & 0.435 & 0.413 \\
+    \textbf{BRISQUE} & 0.944 & 0.929 & 0.748 & 0.812 & 0.571 & 0.626 & 0.567 & 0.528 \\
+    \textbf{ILNIQE} & 0.906 & 0.902 & 0.865 & 0.822 & 0.648 & 0.521 & 0.558 & 0.528 \\
+    \textbf{BIECON} & 0.961 & 0.958 & 0.823 & 0.815 & 0.762 & 0.717 & 0.648 & 0.623 \\
+    \textbf{MEON} & 0.955 & 0.951 & 0.864 & 0.852 & 0.824 & 0.808 & 0.691 & 0.604 \\
+    \textbf{WaDIQaM} & 0.955 & 0.960 & 0.844 & 0.852 & 0.855 & 0.835 & 0.752 & 0.739 \\
+    \textbf{DBCNN} & 0.971 & 0.968 & 0.959 & 0.946 & 0.865 & 0.816 & 0.856 & 0.851 \\
+    \textbf{TIQA} & 0.965 & 0.949 & 0.838 & 0.825 & 0.858 & 0.846 & 0.855 & 0.850 \\
+    \textbf{MetaIQA} & 0.959 & 0.960 & 0.908 & 0.899 & 0.868 & 0.856 & 0.775 & 0.762 \\
+    \textbf{P2P-BM} & 0.958 & 0.959 & 0.902 & 0.899 & 0.856 & 0.862 & 0.849 & 0.840 \\
+    \textbf{HyperIQA} & 0.966 & 0.962 & 0.942 & 0.923 & 0.858 & 0.840 & 0.845 & 0.852 \\
+    \textbf{TReS} & 0.968 & 0.969 & 0.942 & 0.922 & 0.883 & 0.863 & 0.858 & 0.915 \\
+    \textbf{MANIQA} & 0.983 & 0.982 & 0.968 & 0.961 & 0.943 & 0.937 & 0.946 & 0.944 \\
+    \hline
+\end{tabular}
+\end{table}
+
+Ci-dessus les scores sont divisés en deux métriques : PLCC (Pearson Linear Correlation Coefficient) et SRCOCC (Spearman Rank Order Correlation Coefficient). La première assume une relation linéaire entre les résultats tandis que la seconde assume une relation monotone sans être linéaire pour autant. Ces deux mesures sont comprises entre -1 et 1, et un score plus élevé indique une meilleure performance du modèle.  
+
+\PARstart{A}{survey :}
+\newline
+
+\begin{table}[h]
+\caption{Informations sur les données utilisées pour évaluer les différents algorithmes d’évaluations de la qualité d’image sont}
+\label{table_databases}
+\setlength{\tabcolsep}{5.5pt}
+\begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \textbf{Database} & \textbf{Année} & \textbf{No. Référence} & \textbf{No. Distortion} & \textbf{Résolution} \\
+    \hline
+    CSIQ & 2009 & 30 & 866 & 512 x 512 \\
+    LIVE & 2004 & 30 & 779 & 768 x 512 \\
+    TID2008 & 2008 & 25 & 1700 & 512 x 384 \\
+    TID2013 & 2013 & 25 & 3000 & 512 x 384 \\
+    \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\caption{Extrait du tableau comparatif des résultats sur les différents critères d’évaluation de la qualité d’image}
+\label{table_nouveau}
+\setlength{\tabcolsep}{1.7pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Dataset} & \multicolumn{2}{c|}{\textbf{CSIQ}} & \multicolumn{2}{c|}{\textbf{LIVE}} & \multicolumn{2}{c|}{\textbf{TID2008}} & \multicolumn{2}{c|}{\textbf{TID2013}} \\
+    \cline{2-9}
+    & \textbf{SRCC} & \textbf{PLCC} & \textbf{SRCC} & \textbf{PLCC} & \textbf{SRCC} & \textbf{PLCC} & \textbf{SRCC} & \textbf{PLCC} \\
+    \hline
+    IL-NIQE & 0,822 & 0,865 & 0,902 & 0,906 & - & - & 0,521 & 0,648 \\
+    DESIQUE & 0,928 & 0,942 & 0,9437 & 0,9465 & 0,919 & 0,925 & - & - \\
+    C-DIVINE & 0,910 & 0,935 & 0,944 & 0,9474 & 0,92 & 0,925 & - & - \\
+    HOSA & 0,9298 & 0,9480 & 0,9504 & 0,9527 & - & - & 0,9521 & 0,9592 \\
+    LQP & 0,9109 & 0,9255 & 0,9289 & 0,9307 & - & - & 0,9244 & 0,9325 \\
+    \hline
+\end{tabular}
+\end{table}
+
+Ici, SRCC signifie Spearman Rank Correlation Coefficient et permet de mesurer la concordance entre les scores prédits par la métrique. PLCC signifie Pearson Linear Correlation Coefficient et permet de quantifier la corrélation linéaire entre l'évaluation subjective et les scores prédits par la métrique, ce qui permet d'évaluer la précision de la prédiction de la métrique. 
 
 \section{Justification du choix de l'article}
 
 \subsection{Les articles utilisés et pourquoi (MANIQA et BRISQUE)}
 
-abc
+\PARstart{N}{ous} avons choisi les algorithmes BRISQUE et MANIQA car ils présentaient tous les deux des résultats très satisfaisants et répondaient à notre problématique d’évaluation d’images sans référence. BRISQUE présente des améliorations nettes en termes de performance et de complexité de calcul (faible) par rapport à l’état de l’art existant, tandis que MANIQA est le gagnant du défi sur la qualité des images sans référence au NTIRE 2022.  
+
+En plus de ces avantages certains, les algorithmes BRISQUE et MANIQA sont tous deux utilisables par tout le public.  
+
+BRISQUE a une bibliothèque python dédiée, nous permettant d’effectuer des tests sur nos propres images, avec une documentation appropriée. 
+
+MANIQA est quant à lui disponible en open source sur un repos GitHub, rendant également possible notre cas d’étude.   
 
 \subsection{Explication du fonctionnement (notre expérimentation)}
 
-abc
+\PARstart{P}{our} notre expérimentation, nous avons généré des images par Crayion, Deep AI et Design Canva. Pour Deep AI, nous avons généré 2 versions : une version de base et une version améliorée. Pour générer nos images, nous avons utilisé la phrase suivante : « a beautiful woman standing atop a mountain range with a breezy view ». Nous avons également récupéré une vraie photo. Nous avons finalement noté toutes ces images grâce à BRISQUE et MANIQA. Nous avons également fait noter ces images de 1 à 10 par des humains, et avons fait la moyenne de celles-ci.
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
 
 \subsection{Les résultats de l'expérimentation}
 
-abc
+\begin{table}[h]
+\caption{Évaluations des images}
+\label{table_images}
+\setlength{\tabcolsep}{1.8pt}
+\begin{tabular}{|l|c|c|c|}
+    \hline
+    \textbf{Images} & \textbf{Note BRISQUE} & \textbf{Note MANIQA} & \textbf{Notes Hommes} \\
+    \hline
+    crayion & 55.1481 & 0.3255 & 4.230 \\
+    deep\_ai & -22.7990 & 0.4277 & 7.000 \\
+    deep\_ai\_enhanced & 2.3412 & 0.3893 & 7.230 \\
+    design\_canva & 26.2346 & 0.5079 & 6.384 \\
+    photo (image témoin) & -0.2149 & 0.5807 & 7.769 \\
+    \hline
+\end{tabular}
+\end{table}
+
+\PARstart{H}{ommes :} Nous avons demandé à plusieurs Hommes de noter les images en donnant une note entre 0 et 10. Nous avons obtenu le classement suivant :
+
+$photo > deep\textunderscore ai\textunderscore enhanced > deep\textunderscore ai > design\textunderscore canva > crayion$
+
+\PARstart{B}{RISQUE :} Les notes sont attribuées entre 0 et 100, une bonne note est une note faible (proche de 0). Notre image témoin a obtenu un score de -0.2, très proche de 0, signe d’une image « naturelle ». Pour cet algorithme, le score de deepai étant négatif, il est difficile de l’interpréter. Peut être que le modèle ne supporte pas. Nous approximons le score de la photo comme étant égal à 0.
+
+$photo > deep\textunderscore ai\textunderscore enhanced > design\textunderscore canva > crayion$ 
+
+Nous pouvons observer que BRISQUE a été très précis dans les notes qu’il a donné aux différentes images. Celles-ci sont identiques aux notes données par les humains. Cependant, il a échoué à donner une notation cohérente une des images qui lui a été proposé.
+
+\PARstart{M}{ANIQA :} La note se situe entre 0 et 1, plus la note est élevée, plus la qualité de l’image est bonne. Notre image témoin a obtenu un score de 0.58, score le plus élevé parmi tous ceux calculés. 
+
+$photo > design\textunderscore canva > deep\textunderscore ai > deep\textunderscore ai\textunderscore enhanced > crayion$ 
+
+MANIQA quant à lui donné une très bonne note à l’image design canva qui pourtant n’était pas bien notée ni par BRISQUE, ni par les humains. Il est vrai que la composition de l’image globale fait sens mais certains détails de l’image posent problème, ce qui a visiblement été pénalisé par BRISQUE et les humains mais par MANIQA. 
+
+Il est également intéressant de noter que MANIQA a donné une meilleure note à la photo deep ai qu’à sa version améliorée deep ai enhanced. Celle-ci est plus nette (plus de pixels), et a été retravaillée par l’algorithme de génération d’images.
 
 \section{Bilan personnel}
 
-abc
+\PARstart{L}{es} algorithmes découverts lors de cette analyse d’articles scientifiques répondent bien à notre problématique d’évaluation de la qualité d’images sans référence en apportant un plus par rapport à leur état de l’art. Cependant, ces algorithmes ne sont pas parfaits et présentent des possibilités d’amélioration notables.  
 
 \begin{thebibliography}{00}
 
@@ -94,21 +275,24 @@ A. Mittal, Anush K. Moorthy \& A. Bovik
 \emph{No-Reference Image Quality Assessment in the Spatial Domain} [Online].
 \newline
 Available:
-\underline{https://www.semanticscholar.org/paper/No-Reference-Image-Quality-Assessment-in-the-Domain-Mittal-Moorthy/a2cad4e4fd946adf6cc87e483b2ba18579de1264}
+\underline{https://www.semanticscholar.org/paper/No-Reference-Image}
+\underline{-Quality-Assessment-in-the-Domain-Mittal}
+\underline{-Moorthy/a2cad4e4fd946adf6cc87e483b2ba18579de1264}
 
 \bibitem{b3}
-G. Zhai \& X. Min
-\emph{Perceptual image quality assessment: a survey} [Online].
-\newline
-Available:
-\underline{https://www.researchgate.net/publication/341011181\textunderscore Perceptual\textunderscore image\textunderscore quality\textunderscore assessment\textunderscore a\textunderscore survey}
-
-\bibitem{b4}
 S. Yang, T. Wu, S. Shi, S. Lao, Y. Gong, M. Cao, J. Wang \& Y. Yang
 \emph{MANIQA: Multi-dimension Attention Network for No-Reference Image Quality Assessment} [Online].
 \newline
 Available:
 \underline{http://press-pubs.uchicago.edu/founders/}
+
+\bibitem{b4}
+G. Zhai \& X. Min
+\emph{Perceptual image quality assessment: a survey} [Online].
+\newline
+Available:
+\underline{https://www.researchgate.net/publication/341011181}
+\underline{\textunderscore Perceptual\textunderscore image\textunderscore quality\textunderscore assessment\textunderscore a\textunderscore survey}
 
 \end{thebibliography}
 
